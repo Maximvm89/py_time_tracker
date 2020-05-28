@@ -1,3 +1,14 @@
+'''
+Name: time_tracker.py
+Author: Marco Parisi
+Date: 28/05/2020
+Version: 0.0
+DESCRIPTION
+---------------
+Simple time tracker script to track your time
+'''
+
+import argparse
 import json
 import os
 import time
@@ -55,17 +66,68 @@ class TimeTracker:
             total_time_seconds = 0
             print "[+] For task {}".format(task_name)
             for key, value in self.windows.items():
-
                 print "[+]\t\t {} : {}".format(key, self.__print_seconds(value))
                 total_time_seconds += value
 
             print "[+] Total time spent :{}".format(self.__print_seconds(total_time_seconds))
+            # every minute let's dump data, just to avoid to lose info
+            if total_time_seconds % 60 == 0:
+                self.__dump_data()
 
-    def stop_tracking(self):
-        print "Received keyboard interrupt"
-        self.i = 2  # should interrupt the tracking
+    def __dump_data(self):
+
+        print "[+] Saving data in {}".format(self.data_out_json)
         with open(self.data_out_json, "w") as out_file:
             json.dump(self.windows, out_file, indent=1)
+
+    def stop_tracking(self):
+        print "[+] Received keyboard interrupt"
+        self.i = 2  # should interrupt the tracking
+        self.__dump_data()
+        # Show the task available
+        # Create a new task
+        print "[-] Time tracker interrupted"
+        print "[+] Do you want to continue an existing task? [y][n]"
+        y = "y"
+        n = "n"
+        user_input = input()
+        if user_input.lower() == "y":
+            print "[-] Task available"
+            # Create a dictionary of possible task to switch in
+            available_tasks = {}
+            for dirpath, dirnames, filenames in os.walk(self.document_path):
+                count = 0
+                for json_file in filenames:
+                    if json_file.endswith(".json"):
+                        print "\t[{}] {}".format(count, json_file.replace(".json", ""))
+                        available_tasks[count] = json_file.replace(".json", "")
+                        count += 1
+            print "[-] Select the number of the task you want to switch back"
+            user_input = raw_input()
+            try:
+                self.i = 0
+                self.windows = {}
+                try:
+                    self.start_tracking(available_tasks[int(user_input)])
+                except KeyboardInterrupt:
+                    self.stop_tracking()
+            except KeyError:
+                print "[-] Error: couldnt find any task with the input:{}".format(user_input)
+        else:
+            print "[+] Do you want to start track a new task? [y][n]"
+            user_input = input()
+            if user_input.lower() == "y":
+                print "[+] Insert the name of the new task to track:"
+                user_input = raw_input()
+                self.i = 0
+                self.windows = {}
+                try:
+                    self.start_tracking(user_input)
+                except KeyboardInterrupt:
+                    self.stop_tracking()
+            else:
+                print "[+] Closing time tracker"
+                exit()
 
 
 def stop_tracking():
@@ -73,8 +135,14 @@ def stop_tracking():
 
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Time tracker built by Marco Parisi")
+    parser.add_argument('task_name', type=str)
+
+    args = parser.parse_args()
+
     t_tracker = TimeTracker()
     try:
-        t_tracker.start_tracking("building_time_tracker")
+        t_tracker.start_tracking(args.task_name)
     except KeyboardInterrupt:
         t_tracker.stop_tracking()
