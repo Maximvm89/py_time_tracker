@@ -9,6 +9,7 @@ Simple time tracker script to track your time
 '''
 
 import argparse
+import datetime
 import json
 import os
 import time
@@ -17,17 +18,17 @@ import psutil
 import win32gui
 import win32process
 
-# Folder where to store time tracking data
-document_path = os.path.join(os.environ["USERPROFILE"], "Documents", "time_track")
-if not os.path.isdir(document_path):
-    os.makedirs(document_path)
-
 
 class TimeTracker:
     def __init__(self):
         self.windows = {}
         self.i = 0
-        self.document_path = os.path.join(os.environ["USERPROFILE"], "Documents", "time_track")
+        today_date = datetime.datetime.today().strftime("%a_%d_%b_%Y")
+        self.document_path = os.path.join(os.environ["USERPROFILE"], "Documents", "time_track",
+                                          today_date)
+        if not os.path.isdir(self.document_path):
+            print "[+] Creating folder {}".format(self.document_path)
+            os.makedirs(self.document_path)
         self.data_out_json = ""
 
     def __print_seconds(self, seconds):
@@ -37,7 +38,7 @@ class TimeTracker:
 
     def start_tracking(self, task_name="Default"):
         # let's check if a json file already exists
-        self.data_out_json = os.path.join(document_path, task_name + '.json')
+        self.data_out_json = os.path.join(self.document_path, task_name + '.json')
         if os.path.isfile(self.data_out_json):
             print "[+] Found an existing {}".format(self.data_out_json)
             print "[+] Loading previous time track data"
@@ -47,7 +48,7 @@ class TimeTracker:
                     self.windows = json.load(f)
             except ValueError:
                 print "[-] Problem reading {}. Storing json into {}_temp".format(self.data_out_json, task_name)
-                self.data_out_json = os.path.join(document_path, task_name + '_temp.json')
+                self.data_out_json = os.path.join(self.document_path, task_name + '_temp.json')
         else:
             print "[+] Creating a new time track data instance"
 
