@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>622</width>
-    <height>371</height>
+    <height>251</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,8 +33,8 @@
            </property>
           </widget>
          </item>
-         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-          <widget class="QTableWidget" name="tableWidget">
+         <item>
+          <widget class="QTableView" name="software_table">
            <property name="minimumSize">
             <size>
              <width>171</width>
@@ -47,31 +47,6 @@
              <height>16777215</height>
             </size>
            </property>
-           <row>
-            <property name="text">
-             <string>pycharm</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>maya</string>
-            </property>
-           </row>
-           <column>
-            <property name="text">
-             <string>Time</string>
-            </property>
-           </column>
-           <item row="0" column="0">
-            <property name="text">
-             <string>10</string>
-            </property>
-           </item>
-           <item row="1" column="0">
-            <property name="text">
-             <string>20</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -85,33 +60,87 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
           <widget class="QLabel" name="label_2">
+           <property name="minimumSize">
+            <size>
+             <width>385</width>
+             <height>66</height>
+            </size>
+           </property>
            <property name="text">
             <string>Total Time:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLCDNumber" name="lcdNumber"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QSplitter" name="splitter">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+          <widget class="QLCDNumber" name="lcdNumber">
+           <property name="minimumSize">
+            <size>
+             <width>385</width>
+             <height>67</height>
+            </size>
            </property>
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="text">
-             <string>Pause</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>Stop</string>
-            </property>
-           </widget>
+           <property name="maximumSize">
+            <size>
+             <width>385</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color:gray;</string>
+           </property>
+           <property name="smallDecimalPoint">
+            <bool>false</bool>
+           </property>
+           <property name="digitCount">
+            <number>8</number>
+           </property>
+           <property name="mode">
+            <enum>QLCDNumber::Dec</enum>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
+           </property>
+           <property name="value" stdset="0">
+            <double>0.000000000000000</double>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>0</number>
+           </property>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QPushButton" name="pause_button">
+             <property name="text">
+              <string>Pause</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="stop_button">
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="start_button">
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>

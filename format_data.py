@@ -9,7 +9,7 @@ today_date = datetime.datetime.today().strftime("%a_%d_%b_%Y")
 document_path = os.path.join(os.environ["USERPROFILE"], "Documents", "time_track",
                              today_date)
 
-document_path = r"C:\Users\marco\Documents\time_track\Thu_28_May_2020"
+document_path = r"C:\Users\marco\Documents\time_track\Sat_30_May_2020"
 csv_file = os.path.join(document_path, "total.csv")
 for dirpath, dirnames, filenames in os.walk(document_path):
     for json_file in filenames:
@@ -39,13 +39,9 @@ with open(csv_file, "w") as csv_file:
     writer.writeheader()
     for key, value in tracking_data.items():
         formatted_comma_string = "{},".format(key)  # Name of the task
-        print key
-        print value
         for window in windows_header:
-            print window
             try:
                 if value[window]:
-                    print value[window]
                     formatted_comma_string += "{},".format(__print_seconds(value[window]))
             except KeyError:
                 formatted_comma_string += ","
